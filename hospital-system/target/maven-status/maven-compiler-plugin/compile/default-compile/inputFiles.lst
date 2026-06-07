@@ -8,6 +8,7 @@ D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\filter\A
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\model\Patient.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\controller\PatientServlet.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\service\DoctorService.java
+D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\controller\LoginServlet.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\dao\DiagnosisDAO.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\model\Doctor.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\dao\TreatmentExecutionDAO.java

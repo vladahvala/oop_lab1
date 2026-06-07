@@ -15,7 +15,7 @@ export default function TreatmentsPage() {
     try {
       const res = await fetch(`${BASE_URL}/treatments`, {
         headers: {
-          Authorization: ROLE
+        Authorization: `Bearer ${localStorage.getItem("token")}`
         }
       });
 
@@ -37,7 +37,7 @@ export default function TreatmentsPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: ROLE
+         Authorization: `Bearer ${localStorage.getItem("token")}`
         },
         body: JSON.stringify({
           diagnosisId: Number(diagnosisId),

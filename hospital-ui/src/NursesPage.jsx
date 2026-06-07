@@ -9,7 +9,7 @@ export default function NursesPage() {
 
   async function load() {
     const res = await fetch(`${BASE_URL}/nurses`, {
-      headers: { Authorization: ROLE }
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     });
     setNurses(await res.json());
   }
@@ -23,7 +23,7 @@ export default function NursesPage() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: ROLE
+       Authorization: `Bearer ${localStorage.getItem("token")}`
       },
       body: JSON.stringify({ fullName: name })
     });

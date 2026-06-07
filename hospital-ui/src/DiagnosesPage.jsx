@@ -14,7 +14,7 @@ export default function DiagnosesPage() {
   // GET patients (для вибору)
   async function loadPatients() {
     const res = await fetch(`${BASE_URL}/patients`, {
-      headers: { Authorization: ROLE }
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     });
     const data = await res.json();
     setPatients(data);
@@ -23,7 +23,7 @@ export default function DiagnosesPage() {
   // GET diagnoses
   async function loadDiagnoses() {
     const res = await fetch(`${BASE_URL}/diagnoses`, {
-      headers: { Authorization: ROLE }
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     });
     const data = await res.json();
     setDiagnoses(data);
@@ -45,7 +45,7 @@ export default function DiagnosesPage() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: ROLE
+    Authorization: `Bearer ${localStorage.getItem("token")}`
       },
       body: JSON.stringify({
         patientId: Number(patientId),

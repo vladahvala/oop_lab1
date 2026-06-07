@@ -3,6 +3,7 @@ com\hospital\service\NurseService.class
 com\hospital\PatientServlet.class
 com\hospital\dao\PatientDAO.class
 com\hospital\TreatmentExecutionServlet.class
+com\hospital\auth\LoginServlet.class
 com\hospital\dao\NurseDAO.class
 com\hospital\filter\AuthFilter.class
 com\hospital\model\Nurse.class
@@ -13,6 +14,7 @@ com\hospital\filter\LoggingFilter.class
 com\hospital\NurseServlet.class
 com\hospital\service\TreatmentService.class
 com\hospital\dao\DoctorDAO.class
+com\hospital\auth\LoginServlet$LoginRequest.class
 com\hospital\dao\TreatmentDAO.class
 com\hospital\model\Doctor.class
 com\hospital\DiagnosisServlet.class

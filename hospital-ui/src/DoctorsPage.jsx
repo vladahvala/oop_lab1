@@ -9,7 +9,7 @@ export default function DoctorsPage() {
 
   async function load() {
     const res = await fetch(`${BASE_URL}/doctors`, {
-      headers: { Authorization: ROLE }
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}`}
     });
     setDoctors(await res.json());
   }
@@ -23,7 +23,7 @@ export default function DoctorsPage() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: ROLE
+        Authorization: `Bearer ${localStorage.getItem("token")}`
       },
       body: JSON.stringify({ fullName: name })
     });

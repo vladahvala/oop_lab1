@@ -5,7 +5,7 @@ const ROLE = "DOCTOR";
 export async function getPatients() {
   const res = await fetch(`${BASE_URL}/patients`, {
     headers: {
-      Authorization: ROLE
+Authorization: `Bearer ${localStorage.getItem("token")}`
     }
   });
   return res.json();
@@ -16,7 +16,7 @@ export async function addPatient(patient) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: ROLE
+Authorization: `Bearer ${localStorage.getItem("token")}`
     },
     body: JSON.stringify(patient)
   });
@@ -29,7 +29,7 @@ export async function dischargePatient(id) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: ROLE
+Authorization: `Bearer ${localStorage.getItem("token")}`
     },
     body: JSON.stringify({ patientId: id })
   });
