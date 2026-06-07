@@ -48,7 +48,9 @@ public class TreatmentExecutionServlet extends HttpServlet {
 
         logger.info("Incoming execution for treatmentId=" + t.getTreatmentId());
 
-        service.add(t);
+        String role = req.getHeader("Role");
+
+        service.executeTreatment(t, role);
 
         logger.info("Execution saved");
 
