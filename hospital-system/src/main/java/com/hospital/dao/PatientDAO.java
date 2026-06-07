@@ -2,13 +2,12 @@ package com.hospital.dao;
 
 import com.hospital.model.Patient;
 import com.hospital.util.DBConnection;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class PatientDAO {
 
@@ -27,18 +26,17 @@ public class PatientDAO {
                 ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                Patient p = new Patient(
+                list.add(new Patient(
                         rs.getInt("id"),
                         rs.getString("full_name"),
                         rs.getString("birth_date"),
-                        rs.getString("status"));
-                list.add(p);
+                        rs.getString("status")));
             }
 
-            logger.info("Successfully fetched " + list.size() + " patients");
+            logger.info("Fetched " + list.size() + " patients");
 
         } catch (Exception e) {
-            logger.error("DB error in getAll(): " + e.getMessage());
+            logger.error("getAll error: " + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -55,18 +53,84 @@ public class PatientDAO {
         try (Connection conn = DBConnection.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            logger.info("BirthDate value: " + p.getBirthDate());
-
             ps.setString(1, p.getFullName());
-            ps.setDate(2, java.sql.Date.valueOf(p.getBirthDate().trim()));
+            ps.setDate(2, Date.valueOf(p.getBirthDate().trim()));
             ps.setString(3, p.getStatus());
 
             ps.executeUpdate();
 
-            logger.info("Patient inserted successfully: " + p.getFullName());
+            logger.info("Inserted patient: " + p.getFullName());
 
         } catch (Exception e) {
-            logger.error("DB error in add(): " + e.getMessage());
+            logger.error("add error: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    // GET BY ID
+    public Patient getById(int id) {
+
+        String sql = "SELECT * FROM patients WHERE id = ?";
+
+        logger.info("Fetching patient id=" + id);
+
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Patient(
+                        rs.getInt("id"),
+                        rs.getString("full_name"),
+                        rs.getString("birth_date"),
+                        rs.getString("status"));
+            }
+
+        } catch (Exception e) {
+            logger.error("getById error: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
+
+    // UPDATE STATUS
+    public void updateStatus(int id, String status) {
+
+        String sql = "UPDATE patients SET status = ? WHERE id = ?";
+
+        logger.info("Updating patient id=" + id + " status=" + status);
+
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, status);
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+
+            logger.info("Status updated");
+
+        } catch (Exception e) {
+            logger.error("updateStatus error: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setFinalDiagnosis(int id) {
+
+        String sql = "UPDATE diagnoses SET final_diagnosis = true WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

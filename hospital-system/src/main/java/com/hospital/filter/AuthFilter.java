@@ -34,7 +34,7 @@ public class AuthFilter implements Filter {
             return;
         }
 
-        // 🟡 DOCTOR — все дозволено
+        // 🟡 DOCTOR — дозволено все
         if (role.equals("DOCTOR")) {
             chain.doFilter(request, response);
             return;
@@ -45,11 +45,10 @@ public class AuthFilter implements Filter {
 
             boolean blocked = uri.contains("/doctors") ||
                     uri.contains("/diagnoses") ||
-                    uri.contains("/patients") && req.getMethod().equals("POST");
+                    (uri.contains("/patients") && req.getMethod().equals("POST"));
 
             if (blocked) {
                 logger.warn("NURSE blocked access to: " + uri);
-
                 resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 resp.getWriter().write("Nurse not allowed");
                 return;

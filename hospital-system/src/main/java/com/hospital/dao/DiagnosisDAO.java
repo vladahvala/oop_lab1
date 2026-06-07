@@ -68,4 +68,31 @@ public class DiagnosisDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public Diagnosis getById(int id) {
+
+        String sql = "SELECT * FROM diagnoses WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Diagnosis(
+                        rs.getInt("id"),
+                        rs.getInt("patient_id"),
+                        rs.getInt("doctor_id"),
+                        rs.getString("description"),
+                        rs.getBoolean("final_diagnosis"));
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
 }

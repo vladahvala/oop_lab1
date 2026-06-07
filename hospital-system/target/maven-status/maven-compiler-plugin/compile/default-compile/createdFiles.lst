@@ -16,6 +16,7 @@ com\hospital\dao\DoctorDAO.class
 com\hospital\dao\TreatmentDAO.class
 com\hospital\model\Doctor.class
 com\hospital\DiagnosisServlet.class
+com\hospital\PatientDischargeServlet$Request.class
 com\hospital\model\Diagnosis.class
 com\hospital\DoctorServlet.class
 com\hospital\util\DBConnection.class
@@ -26,3 +27,4 @@ com\hospital\model\TreatmentExecution.class
 com\hospital\dao\DiagnosisDAO.class
 com\hospital\service\PatientService.class
 com\hospital\service\DiagnosisService.class
+com\hospital\PatientDischargeServlet.class
