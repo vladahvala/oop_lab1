@@ -23,19 +23,44 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
-        String auth = req.getHeader("Authorization");
+        String role = req.getHeader("Authorization");
+        String uri = req.getRequestURI();
 
-        if (auth == null || !auth.equals("secret123")) {
+        logger.info("Role: {} accessing {}", role, uri);
 
-            logger.warn("Unauthorized access attempt to: " + req.getRequestURI());
-
+        if (role == null) {
             resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            resp.getWriter().write("Unauthorized");
+            resp.getWriter().write("No role provided");
             return;
         }
 
-        logger.info("Authorized request: " + req.getMethod() + " " + req.getRequestURI());
+        // 🟡 DOCTOR — все дозволено
+        if (role.equals("DOCTOR")) {
+            chain.doFilter(request, response);
+            return;
+        }
 
-        chain.doFilter(request, response);
+        // 🟡 NURSE — обмеження
+        if (role.equals("NURSE")) {
+
+            boolean blocked = uri.contains("/doctors") ||
+                    uri.contains("/diagnoses") ||
+                    uri.contains("/patients") && req.getMethod().equals("POST");
+
+            if (blocked) {
+                logger.warn("NURSE blocked access to: " + uri);
+
+                resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                resp.getWriter().write("Nurse not allowed");
+                return;
+            }
+
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // ❌ невідома роль
+        resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        resp.getWriter().write("Invalid role");
     }
 }
