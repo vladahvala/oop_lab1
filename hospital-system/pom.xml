@@ -93,6 +93,11 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>1.5.5.Final</version>
+  </dependency>
   </dependencies>
 
   <!-- ===================== -->
@@ -141,8 +146,11 @@
           <version>2.8.2</version>
         </plugin>
 
+
       </plugins>
     </pluginManagement>
+
+    
 
     <!-- ✅ ОЦЕ ГОЛОВНЕ ВИПРАВЛЕННЯ -->
     <plugins>
@@ -162,6 +170,13 @@
               <artifactId>lombok</artifactId>
               <version>1.18.32</version>
             </path>
+
+                  <!-- MapStruct processor -->
+                  <path>
+                    <groupId>org.mapstruct</groupId>
+                    <artifactId>mapstruct-processor</artifactId>
+                    <version>1.5.5.Final</version>
+                </path>
           </annotationProcessorPaths>
 
         </configuration>

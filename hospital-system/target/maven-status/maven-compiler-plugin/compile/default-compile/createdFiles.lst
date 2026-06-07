@@ -1,4 +1,5 @@
 com\hospital\model\Diagnosis$DiagnosisBuilder.class
+com\hospital\mapper\PatientMapper.class
 com\hospital\model\Patient.class
 com\hospital\service\NurseService.class
 com\hospital\PatientServlet.class
@@ -24,6 +25,8 @@ com\hospital\dao\DoctorDAO.class
 com\hospital\auth\LoginServlet$LoginRequest.class
 com\hospital\dao\TreatmentDAO.class
 com\hospital\service\factory\ServiceFactory.class
+com\hospital\mapper\PatientMapperImpl.class
+com\hospital\dto\PatientDto.class
 com\hospital\model\Doctor.class
 com\hospital\DiagnosisServlet.class
 com\hospital\PatientDischargeServlet$Request.class

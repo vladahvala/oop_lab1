@@ -1,13 +1,14 @@
 package com.hospital;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hospital.dto.PatientDto;
+import com.hospital.mapper.PatientMapper;
+import com.hospital.mapper.PatientMapperImpl;
 import com.hospital.model.Patient;
 import com.hospital.service.PatientService;
 
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 import org.apache.logging.log4j.LogManager;
@@ -17,10 +18,12 @@ import org.apache.logging.log4j.Logger;
 public class PatientServlet extends HttpServlet {
 
     private final PatientService service = new PatientService();
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private final PatientMapper mapper = new PatientMapperImpl();
+
     private static final Logger logger = LogManager.getLogger(PatientServlet.class);
 
-    // GET /patients
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
@@ -30,20 +33,15 @@ public class PatientServlet extends HttpServlet {
 
         logger.info("GET /patients called");
 
-        try {
-            String json = mapper.writeValueAsString(service.getAll());
-            resp.getWriter().write(json);
+        String json = objectMapper.writeValueAsString(
+                service.getAll()
+                        .stream()
+                        .map(mapper::toDto)
+                        .toList());
 
-            logger.info("GET /patients success");
-
-        } catch (Exception e) {
-            logger.error("Error in GET /patients: " + e.getMessage());
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("{\"error\":\"Server error\"}");
-        }
+        resp.getWriter().write(json);
     }
 
-    // POST /patients
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
@@ -53,29 +51,16 @@ public class PatientServlet extends HttpServlet {
 
         logger.info("POST /patients called");
 
-        try {
-            // читаємо JSON
-            Patient patient = mapper.readValue(req.getReader(), Patient.class);
+        PatientDto dto = objectMapper.readValue(req.getReader(), PatientDto.class);
 
-            logger.info("Incoming patient: " + patient.getFullName());
+        Patient patient = mapper.toEntity(dto);
 
-            // дефолтний статус
-            patient.setStatus("ADMITTED");
+        // 🔥 головне: ти САМ задаєш статус
+        patient.setStatus("ADMITTED");
 
-            // збереження в БД
-            service.add(patient);
+        service.add(patient);
 
-            logger.info("Patient saved: " + patient.getFullName());
-
-            resp.setStatus(HttpServletResponse.SC_CREATED);
-            resp.getWriter().write("{\"message\":\"Patient added!\"}");
-
-        } catch (Exception e) {
-
-            logger.error("Error while adding patient: " + e.getMessage());
-
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
-        }
+        resp.setStatus(HttpServletResponse.SC_CREATED);
+        resp.getWriter().write("{\"message\":\"Patient added\"}");
     }
 }

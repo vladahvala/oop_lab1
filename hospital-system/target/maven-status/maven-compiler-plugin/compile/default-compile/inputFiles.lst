@@ -12,8 +12,10 @@ D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospita
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\dao\PatientDAO.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\dao\TreatmentDAO.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\dao\TreatmentExecutionDAO.java
+D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\dto\PatientDto.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\filter\AuthFilter.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\filter\LoggingFilter.java
+D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\mapper\PatientMapper.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\model\Diagnosis.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\model\Doctor.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\model\Nurse.java
