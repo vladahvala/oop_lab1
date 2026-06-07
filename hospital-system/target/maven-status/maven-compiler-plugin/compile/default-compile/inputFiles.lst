@@ -2,6 +2,8 @@ D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\controll
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\controller\TreatmentExecutionServlet.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\service\TreatmentService.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\util\DBConnection.java
+D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\filter\LoggingFilter.java
+D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\filter\AuthFilter.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\model\Patient.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\controller\PatientServlet.java
 D:\3 курс\2 сем\ООП\oop_lab1\hospital-system\src\main\java\com\hospital\service\DoctorService.java

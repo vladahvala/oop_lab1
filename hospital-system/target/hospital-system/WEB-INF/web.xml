@@ -2,6 +2,31 @@
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+ <web-app>
+
+  <display-name>Hospital System</display-name>
+
+  <!-- AUTH FILTER -->
+  <filter>
+      <filter-name>AuthFilter</filter-name>
+      <filter-class>com.hospital.filter.AuthFilter</filter-class>
+  </filter>
+
+  <!-- LOGGING FILTER -->
+  <filter>
+      <filter-name>LoggingFilter</filter-name>
+      <filter-class>com.hospital.filter.LoggingFilter</filter-class>
+  </filter>
+
+  <!-- ORDER: AUTH FIRST -->
+  <filter-mapping>
+      <filter-name>AuthFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+      <filter-name>LoggingFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
 </web-app>

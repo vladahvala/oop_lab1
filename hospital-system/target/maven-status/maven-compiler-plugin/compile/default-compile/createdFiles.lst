@@ -4,10 +4,12 @@ com\hospital\PatientServlet.class
 com\hospital\dao\PatientDAO.class
 com\hospital\TreatmentExecutionServlet.class
 com\hospital\dao\NurseDAO.class
+com\hospital\filter\AuthFilter.class
 com\hospital\model\Nurse.class
 com\hospital\TestServlet.class
 com\hospital\dao\TreatmentExecutionDAO.class
 com\hospital\service\TreatmentExecutionService.class
+com\hospital\filter\LoggingFilter.class
 com\hospital\NurseServlet.class
 com\hospital\service\TreatmentService.class
 com\hospital\dao\DoctorDAO.class
