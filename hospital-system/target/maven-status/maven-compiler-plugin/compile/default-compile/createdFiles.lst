@@ -1,3 +1,4 @@
+com\hospital\model\Diagnosis$DiagnosisBuilder.class
 com\hospital\model\Patient.class
 com\hospital\service\NurseService.class
 com\hospital\PatientServlet.class
@@ -6,9 +7,12 @@ com\hospital\TreatmentExecutionServlet.class
 com\hospital\auth\LoginServlet.class
 com\hospital\dao\NurseDAO.class
 com\hospital\filter\AuthFilter.class
+com\hospital\model\Nurse$NurseBuilder.class
 com\hospital\model\Nurse.class
+com\hospital\model\Treatment$TreatmentBuilder.class
 com\hospital\TestServlet.class
 com\hospital\dao\TreatmentExecutionDAO.class
+com\hospital\model\Patient$PatientBuilder.class
 com\hospital\service\TreatmentExecutionService.class
 com\hospital\filter\LoggingFilter.class
 com\hospital\NurseServlet.class
@@ -24,9 +28,11 @@ com\hospital\DoctorServlet.class
 com\hospital\util\DBConnection.class
 com\hospital\service\DoctorService.class
 com\hospital\model\Treatment.class
+com\hospital\model\TreatmentExecution$TreatmentExecutionBuilder.class
 com\hospital\TreatmentServlet.class
 com\hospital\model\TreatmentExecution.class
 com\hospital\dao\DiagnosisDAO.class
+com\hospital\model\Doctor$DoctorBuilder.class
 com\hospital\service\PatientService.class
 com\hospital\service\DiagnosisService.class
 com\hospital\PatientDischargeServlet.class
