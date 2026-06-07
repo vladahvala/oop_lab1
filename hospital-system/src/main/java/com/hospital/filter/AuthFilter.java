@@ -1,5 +1,8 @@
 package com.hospital.filter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +11,8 @@ import java.io.IOException;
 
 @WebFilter("/*")
 public class AuthFilter implements Filter {
+
+    private static final Logger logger = LogManager.getLogger(AuthFilter.class);
 
     @Override
     public void doFilter(ServletRequest request,
@@ -20,12 +25,16 @@ public class AuthFilter implements Filter {
 
         String auth = req.getHeader("Authorization");
 
-        // пропускаємо тільки якщо є токен
         if (auth == null || !auth.equals("secret123")) {
+
+            logger.warn("Unauthorized access attempt to: " + req.getRequestURI());
+
             resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             resp.getWriter().write("Unauthorized");
             return;
         }
+
+        logger.info("Authorized request: " + req.getMethod() + " " + req.getRequestURI());
 
         chain.doFilter(request, response);
     }

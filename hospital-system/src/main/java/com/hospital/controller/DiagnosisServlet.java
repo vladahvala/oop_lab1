@@ -8,10 +8,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @WebServlet("/diagnoses")
 public class DiagnosisServlet extends HttpServlet {
 
-    private DiagnosisService service = new DiagnosisService();
+    private final DiagnosisService service = new DiagnosisService();
+    private final ObjectMapper mapper = new ObjectMapper();
+    private static final Logger logger = LogManager.getLogger(DiagnosisServlet.class);
 
     // GET
     @Override
@@ -19,12 +24,20 @@ public class DiagnosisServlet extends HttpServlet {
             throws IOException {
 
         resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
 
-        ObjectMapper mapper = new ObjectMapper();
+        logger.info("GET /diagnoses called");
 
-        String json = mapper.writeValueAsString(service.getAll());
+        try {
+            String json = mapper.writeValueAsString(service.getAll());
+            resp.getWriter().write(json);
 
-        resp.getWriter().write(json);
+            logger.info("GET /diagnoses success");
+
+        } catch (Exception e) {
+            logger.error("Error in GET /diagnoses: " + e.getMessage());
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     // POST
@@ -32,13 +45,26 @@ public class DiagnosisServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
 
-        ObjectMapper mapper = new ObjectMapper();
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
 
-        Diagnosis d = mapper.readValue(req.getReader(), Diagnosis.class);
+        logger.info("POST /diagnoses called");
 
-        service.add(d);
+        try {
+            Diagnosis d = mapper.readValue(req.getReader(), Diagnosis.class);
 
-        resp.setContentType("text/plain");
-        resp.getWriter().write("Diagnosis added!");
+            logger.info("Incoming diagnosis for patientId=" + d.getPatientId());
+
+            service.add(d);
+
+            logger.info("Diagnosis saved");
+
+            resp.setStatus(HttpServletResponse.SC_CREATED);
+            resp.getWriter().write("{\"message\":\"Diagnosis added!\"}");
+
+        } catch (Exception e) {
+            logger.error("Error while adding diagnosis: " + e.getMessage());
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 }

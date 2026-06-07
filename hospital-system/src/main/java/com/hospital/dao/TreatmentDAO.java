@@ -3,16 +3,23 @@ package com.hospital.dao;
 import com.hospital.model.Treatment;
 import com.hospital.util.DBConnection;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TreatmentDAO {
 
-    public List<Treatment> getAll() {
-        List<Treatment> list = new ArrayList<>();
+    private static final Logger logger = LogManager.getLogger(TreatmentDAO.class);
 
+    public List<Treatment> getAll() {
+
+        List<Treatment> list = new ArrayList<>();
         String sql = "SELECT * FROM treatments";
+
+        logger.info("Fetching all treatments from DB");
 
         try (Connection conn = DBConnection.getConnection();
                 Statement stmt = conn.createStatement();
@@ -29,7 +36,10 @@ public class TreatmentDAO {
                 list.add(t);
             }
 
+            logger.info("Fetched " + list.size() + " treatments");
+
         } catch (Exception e) {
+            logger.error("DB error in getAll treatments: " + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -37,7 +47,10 @@ public class TreatmentDAO {
     }
 
     public void add(Treatment t) {
+
         String sql = "INSERT INTO treatments(diagnosis_id, type, description, assigned_by_role, status) VALUES (?, ?, ?, ?, ?)";
+
+        logger.info("Inserting treatment for diagnosisId=" + t.getDiagnosisId());
 
         try (Connection conn = DBConnection.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -50,7 +63,10 @@ public class TreatmentDAO {
 
             ps.executeUpdate();
 
+            logger.info("Treatment inserted successfully");
+
         } catch (Exception e) {
+            logger.error("DB error in add treatment: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

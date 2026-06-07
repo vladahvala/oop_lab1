@@ -8,10 +8,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @WebServlet("/treatments")
 public class TreatmentServlet extends HttpServlet {
 
-    private TreatmentService service = new TreatmentService();
+    private final TreatmentService service = new TreatmentService();
+    private final ObjectMapper mapper = new ObjectMapper();
+    private static final Logger logger = LogManager.getLogger(TreatmentServlet.class);
 
     // GET
     @Override
@@ -19,12 +24,20 @@ public class TreatmentServlet extends HttpServlet {
             throws IOException {
 
         resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
 
-        ObjectMapper mapper = new ObjectMapper();
+        logger.info("GET /treatments called");
 
-        String json = mapper.writeValueAsString(service.getAll());
+        try {
+            String json = mapper.writeValueAsString(service.getAll());
+            resp.getWriter().write(json);
 
-        resp.getWriter().write(json);
+            logger.info("GET /treatments success");
+
+        } catch (Exception e) {
+            logger.error("Error in GET treatments: " + e.getMessage());
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     // POST
@@ -32,15 +45,28 @@ public class TreatmentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
 
-        ObjectMapper mapper = new ObjectMapper();
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
 
-        Treatment t = mapper.readValue(req.getReader(), Treatment.class);
+        logger.info("POST /treatments called");
 
-        t.setStatus("PENDING");
+        try {
+            Treatment t = mapper.readValue(req.getReader(), Treatment.class);
 
-        service.add(t);
+            t.setStatus("PENDING");
 
-        resp.setContentType("text/plain");
-        resp.getWriter().write("Treatment added!");
+            logger.info("Incoming treatment for diagnosisId=" + t.getDiagnosisId());
+
+            service.add(t);
+
+            logger.info("Treatment saved");
+
+            resp.setStatus(HttpServletResponse.SC_CREATED);
+            resp.getWriter().write("{\"message\":\"Treatment added!\"}");
+
+        } catch (Exception e) {
+            logger.error("Error while adding treatment: " + e.getMessage());
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 }

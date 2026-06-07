@@ -3,6 +3,9 @@ package com.hospital.dao;
 import com.hospital.model.TreatmentExecution;
 import com.hospital.util.DBConnection;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,10 +13,14 @@ import java.util.List;
 
 public class TreatmentExecutionDAO {
 
-    public List<TreatmentExecution> getAll() {
-        List<TreatmentExecution> list = new ArrayList<>();
+    private static final Logger logger = LogManager.getLogger(TreatmentExecutionDAO.class);
 
+    public List<TreatmentExecution> getAll() {
+
+        List<TreatmentExecution> list = new ArrayList<>();
         String sql = "SELECT * FROM treatment_executions";
+
+        logger.info("Fetching all executions from DB");
 
         try (Connection conn = DBConnection.getConnection();
                 Statement stmt = conn.createStatement();
@@ -29,7 +36,10 @@ public class TreatmentExecutionDAO {
                 list.add(t);
             }
 
+            logger.info("Fetched " + list.size() + " executions");
+
         } catch (Exception e) {
+            logger.error("DB error in getAll executions: " + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -37,7 +47,10 @@ public class TreatmentExecutionDAO {
     }
 
     public void add(TreatmentExecution t) {
+
         String sql = "INSERT INTO treatment_executions(treatment_id, nurse_id, doctor_id, executed_at) VALUES (?, ?, ?, ?)";
+
+        logger.info("Inserting execution for treatmentId=" + t.getTreatmentId());
 
         try (Connection conn = DBConnection.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -59,7 +72,10 @@ public class TreatmentExecutionDAO {
 
             ps.executeUpdate();
 
+            logger.info("Execution inserted successfully");
+
         } catch (Exception e) {
+            logger.error("DB error in add execution: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

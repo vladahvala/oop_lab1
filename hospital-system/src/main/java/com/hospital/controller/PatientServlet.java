@@ -10,11 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @WebServlet("/patients")
 public class PatientServlet extends HttpServlet {
 
     private final PatientService service = new PatientService();
     private final ObjectMapper mapper = new ObjectMapper();
+    private static final Logger logger = LogManager.getLogger(PatientServlet.class);
 
     // GET /patients
     @Override
@@ -24,9 +28,19 @@ public class PatientServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
-        String json = mapper.writeValueAsString(service.getAll());
+        logger.info("GET /patients called");
 
-        resp.getWriter().write(json);
+        try {
+            String json = mapper.writeValueAsString(service.getAll());
+            resp.getWriter().write(json);
+
+            logger.info("GET /patients success");
+
+        } catch (Exception e) {
+            logger.error("Error in GET /patients: " + e.getMessage());
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("{\"error\":\"Server error\"}");
+        }
     }
 
     // POST /patients
@@ -37,20 +51,29 @@ public class PatientServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
+        logger.info("POST /patients called");
+
         try {
-            // читаємо JSON з запиту
+            // читаємо JSON
             Patient patient = mapper.readValue(req.getReader(), Patient.class);
+
+            logger.info("Incoming patient: " + patient.getFullName());
 
             // дефолтний статус
             patient.setStatus("ADMITTED");
 
-            // зберігаємо в БД
+            // збереження в БД
             service.add(patient);
+
+            logger.info("Patient saved: " + patient.getFullName());
 
             resp.setStatus(HttpServletResponse.SC_CREATED);
             resp.getWriter().write("{\"message\":\"Patient added!\"}");
 
         } catch (Exception e) {
+
+            logger.error("Error while adding patient: " + e.getMessage());
+
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
         }
