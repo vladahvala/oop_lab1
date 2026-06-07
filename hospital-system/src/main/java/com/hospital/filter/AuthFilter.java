@@ -23,6 +23,16 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
+        // CORS (ТІЛЬКИ ТУТ!)
+        resp.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        resp.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+
+        if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
+            resp.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
         String role = req.getHeader("Authorization");
         String uri = req.getRequestURI();
 
@@ -34,13 +44,11 @@ public class AuthFilter implements Filter {
             return;
         }
 
-        // 🟡 DOCTOR — дозволено все
         if (role.equals("DOCTOR")) {
             chain.doFilter(request, response);
             return;
         }
 
-        // 🟡 NURSE — обмеження
         if (role.equals("NURSE")) {
 
             boolean blocked = uri.contains("/doctors") ||
@@ -48,7 +56,6 @@ public class AuthFilter implements Filter {
                     (uri.contains("/patients") && req.getMethod().equals("POST"));
 
             if (blocked) {
-                logger.warn("NURSE blocked access to: " + uri);
                 resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 resp.getWriter().write("Nurse not allowed");
                 return;
@@ -58,7 +65,6 @@ public class AuthFilter implements Filter {
             return;
         }
 
-        // ❌ невідома роль
         resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         resp.getWriter().write("Invalid role");
     }
